@@ -1,0 +1,47 @@
+<div class="card border-light my-3">
+  <div class="card-header">Producto</div>
+  <div class="card-body">
+
+
+    <!-- form -->
+    <form [formGroup]="productoForm" novalidate="">
+
+      <div class="row">
+
+        <div class="col-12 col-sm-6">
+          <label for="nombre">Nombre</label>
+          <input type="text" class="form-control" placeholder="Nombre" formControlName="nombre"
+            [ngClass]="{'is-invalid': (productoForm.get('nombre').invalid && productoForm.get('nombre').touched)}">
+          <div class="invalid-feedback" *ngIf="productoForm.get('nombre').invalid">
+            <span *ngIf="productoForm.get('nombre').errors?.required">El nombre es requerido</span>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6">
+          <label for="precio">Precio</label>
+          <input type="text" class="form-control" placeholder="Precio" formControlName="precio"
+            [ngClass]="{'is-invalid': (productoForm.get('precio').invalid && productoForm.get('precio').touched)}">
+          <div class="invalid-feedback" *ngIf="productoForm.get('precio').invalid">
+            <span *ngIf="productoForm.get('precio').errors?.required">El precio es requerido</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row justify-content-end mr-2 mt-3">
+        <button type="submit" class="btn btn-primary btn-sm" (click)="updateProducto()"
+          *ngIf="producto.id">Actualizar</button>
+        <button type="submit" class="btn btn-primary btn-sm" (click)="saveProducto()"
+          *ngIf="!producto.id">Agregar</button>
+      </div>
+
+      <!-- <input type="number" class="form-control" formControlName="id" style="display:none"> -->
+
+
+
+    </form>
+    <!-- form -->
+
+
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="row justify-content-end mr-3">
+  <button *ngIf="_authService.isAuthenticated() && _authService.hasRole('ROLE_ADMIN')"
+    [routerLink]="['/productos/form']" class="btn btn-sm btn-primary">Agregar Producto</button>
+</div>
+<div class="card border-light my-3">
+  <div class="card-header">Listado Productos</div>
+  <div class="card-body">
+    <table class="table table-hover table-sm" *ngIf="productos?.length>0 else elseBlock">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>nombre</th>
+          <th>precio</th>
+          <th *ngIf="_authService.isAuthenticated() && _authService.hasRole('ROLE_ADMIN')">Operaciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of productos">
+          <td>{{producto.id}}</td>
+          <td>{{producto.nombre}}</td>
+          <td>{{producto.precio | currency:'MXN'}}</td>
+          <td *ngIf="_authService.isAuthenticated() && _authService.hasRole('ROLE_ADMIN')">
+            <button class="btn btn-sm btn-warning mr-2" [routerLink]="['/productos/form/', producto.id]"><i
+                class="far fa-edit"></i></button>
+            <button class="btn btn-sm btn-danger" (click)="deleteProducto(producto)"><i
+                class="far fa-trash-alt"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <paginator-nav *ngIf="productos?.length > 0 && paginador?.totalElements > paginador?.size" [url]="urlPaginator"
+      [paginador]="paginador">
+    </paginator-nav>
+
+    <ng-template #elseBlock>
+      <div class="alert alert-warning" role="alert">
+        No hay Productos registrados en la base de datos!
+      </div>
+    </ng-template>
+
+  </div>
+</div>

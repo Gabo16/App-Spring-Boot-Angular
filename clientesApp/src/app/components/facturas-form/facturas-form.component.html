@@ -1,0 +1,85 @@
+<div class="card border-light my-3">
+  <div class="card-header">Agregar Factura</div>
+  <div class="card-body">
+
+    <form [formGroup]="formFactura" novalidate *ngIf="formFactura">
+
+      <div class="row">
+
+        <div class="col">
+          <label for="descripcion">Cliente</label>
+          <input type="text" class="form-control" formControlName="cliente">
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="col">
+          <label for="descripcion">Descripcion</label>
+          <input type="text" class="form-control" placeholder="Descripcion" formControlName="descripcion"
+            [ngClass]="{'is-invalid': (formFactura.get('descripcion').invalid && formFactura.get('descripcion').touched)}">
+          <div class="invalid-feedback" *ngIf="formFactura.get('descripcion').invalid">
+            <span>La descripcion es requerida</span>
+          </div>
+        </div>
+
+        <div class="col">
+          <label for="observacion">Observacion</label>
+          <textarea class="form-control" placeholder="Observacion" formControlName="observacion"></textarea>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field>
+            <input type="text" placeholder="Añadir Producto" aria-label="Number" matInput
+              [formControl]="autocompleteControl" [matAutocomplete]="auto">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="mostrarNombre"
+              (optionSelected)="seleccionarProducto($event)">
+              <mat-option *ngFor="let producto of productosFiltrados | async" [value]="producto">
+                {{producto.nombre}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="alert alert-warning my-4" *ngIf="factura.items.length == 0">
+        ¡No hay lineas asignadas a la factura!
+      </div>
+
+      <table class="table table-hover table-sm" *ngIf="factura.items.length>0">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of factura.items">
+            <td>{{item.producto.nombre}}</td>
+            <td>{{item.producto.precio}}</td>
+            <td><input type="number" value="{{item.cantidad}}" class="form-control form-control-sm col-2"
+                (change)="actualizarCantidad(item.producto.id, $event)"></td>
+            <td>{{item.calcularImporte()}}</td>
+            <td><button class="btn btn-sm btn-danger" (click)="deleteItem(item.producto.id)"><i
+                  class="far fa-trash-alt"></i></button></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="row justify-content-end mt-3 mr-1" *ngIf="factura.items.length>0">
+        <h5>Gran Total: {{factura.calcularGranTotal()}}</h5>
+      </div>
+      <div class="row justify-content-end mt-3 mr-1">
+        <button class="btn btn-primary" (click)="create()">Agregar</button>
+      </div>
+
+    </form>
+
+  </div>
+</div>

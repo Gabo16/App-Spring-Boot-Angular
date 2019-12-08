@@ -1,0 +1,49 @@
+<div class="d-flex" id="wrapper" [ngClass]="{'toggled': toggled}">
+
+  <!-- Sidebar -->
+  <div class="bg-primary border-right" id="sidebar-wrapper">
+    <div class="sidebar-heading text-white">{{titulo}}</div>
+    <div class="list-group list-group-flush">
+      <a *ngIf="_authService.isAuthenticated()" [routerLink]="['/clientes']"
+        class="list-group-item list-group-item-action bg-primary text-white">Clientes</a>
+      <a [routerLink]="['/productos']"
+        class="list-group-item list-group-item-action bg-primary text-white">Productos</a>
+    </div>
+  </div>
+  <!-- /#sidebar-wrapper -->
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary border-bottom justify-content-between">
+      <a class="text-white" (click)="toggled = !toggled" id="menu-toggle" style="cursor: pointer;"><i
+          class="fas fa-bars"></i></a>
+      <button class="btn btn-primary" *ngIf="!_authService.isAuthenticated()" [routerLink]="['/login']"
+        routerLinkActive="active">Iniciar Sesión</button>
+      <div class="dropdown mr-4" *ngIf="_authService.isAuthenticated()">
+        <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          {{_authService.usuario.username}}
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <a (click)="logout()" class="dropdown-item" href="#">Cerrar Sesion</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid py-5">
+
+
+      <router-outlet></router-outlet>
+
+
+    </div>
+    <!-- ./container-fluid -->
+
+  </div>
+  <!-- /#page-content-wrapper -->
+
+</div>
+<!-- /#wrapper -->

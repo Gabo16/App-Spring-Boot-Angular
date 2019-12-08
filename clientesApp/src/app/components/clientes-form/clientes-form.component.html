@@ -1,0 +1,63 @@
+<div class="card border-light my-3">
+  <div class="card-header">Cliente</div>
+  <div class="card-body">
+
+
+    <!-- form -->
+    <form [formGroup]="clienteForm" novalidate="">
+
+      <div class="row">
+
+        <div class="col">
+          <label for="nombre">Nombre</label>
+          <input type="text" class="form-control" placeholder="Nombre" formControlName="nombre"
+            [ngClass]="{'is-invalid': (clienteForm.get('nombre').invalid && clienteForm.get('nombre').touched)}">
+          <div class="invalid-feedback" *ngIf="clienteForm.get('nombre').invalid">
+            <span *ngIf="clienteForm.get('nombre').errors?.required">El nombre es requerido</span>
+            <span *ngIf="clienteForm.get('nombre').errors?.minlength">El nombre debe tener al menos 3 letras</span>
+          </div>
+        </div>
+
+        <div class="col">
+          <label for="apellido">Apellido</label>
+          <input type="text" class="form-control" placeholder="Apellido" id="apellido" name="apellido"
+            formControlName="apellido"
+            [ngClass]="{'is-invalid': (clienteForm.get('apellido').invalid && clienteForm.get('apellido').touched)}">
+          <div class="invalid-feedback" *ngIf="clienteForm.get('apellido').invalid">
+            <span *ngIf="clienteForm.get('apellido').errors?.required">El apellido es requerido</span>
+            <span *ngIf="clienteForm.get('apellido').errors?.minlength">El apellido debe tener al menos 3 letras</span>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="row mt-2">
+        <div class="col">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" placeholder="Email" id="email" name="email" formControlName="email"
+            [ngClass]="{'is-invalid': (clienteForm.get('email').invalid && clienteForm.get('email').touched) }">
+          <div class="invalid-feedback" *ngIf="clienteForm.get('email').invalid">
+            <span *ngIf="clienteForm.get('email').errors?.required">El email es requerido</span>
+            <span *ngIf="clienteForm.get('email').errors?.email">Direccion de email no valida</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-end mr-2 mt-3">
+        <button type="submit" class="btn btn-primary btn-sm" (click)="updateCliente()"
+          *ngIf="actualizar">Actualizar</button>
+        <!-- <button type="submit" class="btn btn-primary btn-sm" (click)="saveCliente()" *ngIf="!actualizar"
+          [disabled]="clienteForm.invalid">Agregar</button> -->
+        <button type="submit" class="btn btn-primary btn-sm" (click)="saveCliente()"
+          *ngIf="!actualizar">Agregar</button>
+      </div>
+
+      <!-- <input type="number" class="form-control" formControlName="id" style="display:none"> -->
+
+    </form>
+    <!-- form -->
+
+
+  </div>
+</div>

@@ -1,0 +1,101 @@
+<div class="abrir-modal" *ngIf="_modalService.modal">
+  <div class="modal" tabindex="-1" role="dialog" style="display: block;">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Detalle del Cliente</h5>
+          <button (click)="cerrarModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+
+            <div class="row">
+
+
+              <div class="col-4">
+
+                <img *ngIf="cliente" src="http://localhost:8080/api/v1/clientes/uploads/img/{{cliente.foto}}"
+                  alt="{{cliente.foto}}" width="200" height="200">
+
+              </div>
+
+              <div class="col-6">
+
+                <div *ngIf="cliente">
+                  <p><strong>Nombre:</strong> {{cliente.nombre}}</p>
+                  <p><strong>Apellido:</strong> {{cliente.apellido}}</p>
+                  <p><strong>Email:</strong> {{cliente.email}}</p>
+                  <p><strong>Creado:</strong> {{cliente.createdAt | date:"fullDate"}}</p>
+                </div>
+
+                <div class="progress" *ngIf="progreso > 0" style="height: 20px;">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                    [ngStyle]="{width:progreso+'%'}" attr.aria-valuenow="{{progreso}}" aria-valuemin="0"
+                    aria-valuemax="100">
+                    {{progreso}}%</div>
+                </div>
+
+                <div *ngIf="_authService.hasRole('ROLE_ADMIN')" class="input-group mt-4">
+                  <div class="custom-file">
+                    <input (change)="seleccionarFoto($event)" type="file" class="custom-file-input"
+                      id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                    <label class="custom-file-label" for="inputGroupFile04">Seleccionar Foto</label>
+                  </div>
+                  <div class="input-group-append">
+                    <button (click)="subirFoto()" [disabled]="!fotoSeleccionada" class="btn btn-primary" type="button"
+                      id="inputGroupFileAddon04">Subir</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="alert alert-info my-4" *ngIf="cliente.facturas.length == 0">
+              No hay facturas asignadas al cliente {{cliente.nombre}} {{cliente.apellido}}
+            </div>
+
+            <div class="row justify-content-end mt-4">
+              <button class="btn btn-sm btn-primary mr-2" [routerLink]="['/facturas/form/', cliente.id]"><i
+                  class="fas fa-plus"></i> Agregar Factura</button>
+            </div>
+
+            <div class="row" *ngIf="cliente.facturas.length > 0">
+              <table class="table table-hover table-sm my-4">
+                <thead>
+                  <tr>
+                    <th>Folio</th>
+                    <th>Descripcion</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Operaciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let factura of cliente.facturas">
+                    <td>{{factura.id}}</td>
+                    <td>{{factura.descripcion}}</td>
+                    <td>{{factura.createdAt | date: 'medium'}}</td>
+                    <td>{{factura.total | currency:'MXN'}}</td>
+                    <td>
+                      <button class="btn btn-sm btn-primary mr-2" [routerLink]="['/facturas', factura.id]"><i
+                          class="far fa-eye"></i></button>
+                      <button class="btn btn-sm btn-danger"
+                        *ngIf="_authService.isAuthenticated() && _authService.hasRole('ROLE_ADMIN')"
+                        (click)="delete(factura)"><i class="far fa-trash-alt"></i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="cerrarModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
